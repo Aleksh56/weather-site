@@ -3,11 +3,13 @@ import { BsSearch } from "react-icons/bs"
 import LocationWeather from "./LocationWeather"
 import { useDispatch, useSelector } from "react-redux"
 import { setLocation, saveLocation } from "../Redux/Slices/LocationSlice"
+import axios from "axios"
 import styles from "../styles"
 
 const SearchMenu: React.FC = () => {
-  const [cityWeather, setCityWeather] = useState(true)
+  const [cityWeather, setCityWeather] = useState(false)
   const [inputLocation, setInputLocation] = useState("")
+  const [locationResponse, setLocationRespose] = useState({})
   const location = useSelector((state: any) => state.location.location)
   const dispatch = useDispatch()
 
@@ -15,11 +17,25 @@ const SearchMenu: React.FC = () => {
     dispatch(saveLocation({ inputLocation }))
     if (inputLocation.replace(/\s/g, "")) {
       try {
-        // console.log("ura!!")
-        const WEATHER_API = "some link"
-        fetch(WEATHER_API).then((response: any) => JSON.parse(response))
+        const WEATHER_API = `http://api.weatherapi.com/v1/current.json?key=c5807f066fb54e39a9772631231602&q=${inputLocation}`
+        axios
+          .get(WEATHER_API)
+          .then(function (response) {
+            setCityWeather(false)
+            setLocationRespose(response)
+            setTimeout(() => {
+              setCityWeather(true)
+            }, 700)
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error)
+          })
+          .finally(function () {
+            // always executed
+          })
       } catch (error) {
-        console.log(error)
+        console.log("sorry")
       }
     }
   }
@@ -43,7 +59,7 @@ const SearchMenu: React.FC = () => {
         </button>
       </div>
       {cityWeather ? (
-        <LocationWeather />
+        <LocationWeather {...locationResponse} />
       ) : (
         <div className="text-white text-xl">Input your city</div>
       )}
