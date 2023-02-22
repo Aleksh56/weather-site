@@ -1,16 +1,15 @@
 import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 import { BsSearch } from "react-icons/bs"
-import LocationWeather from "./LocationWeather"
-import { useDispatch, useSelector } from "react-redux"
-import { setLocation, saveLocation } from "../Redux/Slices/LocationSlice"
 import axios from "axios"
+import LocationWeather from "./LocationWeather"
+import { setLocation, saveLocation } from "../Redux/Slices/LocationSlice"
 import styles from "../styles"
 
 const SearchMenu: React.FC = () => {
   const [cityWeather, setCityWeather] = useState(false)
   const [inputLocation, setInputLocation] = useState("")
   const [locationResponse, setLocationRespose] = useState({})
-  const location = useSelector((state: any) => state.location.location)
   const dispatch = useDispatch()
 
   const FindLocation = () => {
@@ -21,11 +20,12 @@ const SearchMenu: React.FC = () => {
         axios
           .get(WEATHER_API)
           .then(function (response) {
+            console.log(response)
             setCityWeather(false)
             setLocationRespose(response)
             setTimeout(() => {
               setCityWeather(true)
-            }, 700)
+            }, 500)
           })
           .catch(function (error) {
             // handle error
@@ -37,6 +37,12 @@ const SearchMenu: React.FC = () => {
       } catch (error) {
         console.log("sorry")
       }
+    }
+  }
+
+  const handleKeyPress = (keyEvent: React.KeyboardEvent<HTMLInputElement>) => {
+    if (keyEvent.code === "Enter") {
+      FindLocation()
     }
   }
 
@@ -53,6 +59,7 @@ const SearchMenu: React.FC = () => {
           className={styles.menuInput}
           placeholder="Search..."
           onChange={(event) => SetLoca(event.target.value)}
+          onKeyUp={(keyDown) => handleKeyPress(keyDown)}
         />
         <button onClick={FindLocation}>
           <BsSearch className="text-2xl text-white" />

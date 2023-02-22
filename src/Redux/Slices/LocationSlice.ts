@@ -1,27 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { IlocationState } from "../../interfaces"
+
+const initialState: IlocationState = {
+  location: "",
+  locationHistory: [] as string[],
+}
 
 const locationSlice = createSlice({
   name: "location",
-  initialState: {
-    location: "",
-    locationHistory: <Array<object>>[
-      {
-        id: new Date().toISOString(),
-        city: "Paris",
-      },
-    ],
-  },
+  initialState,
   reducers: {
     setLocation(state, action) {
       state.location = action.payload
     },
     saveLocation(state, action) {
-      console.log(state.locationHistory)
-      let tempObject = {
-        id: new Date().toISOString(),
-        city: action.payload.city,
-      }
-      state.locationHistory.push(tempObject)
+      state.locationHistory.push(action.payload)
     },
   },
 })
