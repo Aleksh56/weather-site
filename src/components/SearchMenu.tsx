@@ -13,30 +13,22 @@ const SearchMenu: React.FC = () => {
   const dispatch = useDispatch()
 
   const FindLocation = () => {
-    dispatch(saveLocation({ inputLocation }))
     if (inputLocation.replace(/\s/g, "")) {
-      try {
-        const WEATHER_API = `http://api.weatherapi.com/v1/current.json?key=c5807f066fb54e39a9772631231602&q=${inputLocation}`
-        axios
-          .get(WEATHER_API)
-          .then(function (response) {
-            console.log(response)
-            setCityWeather(false)
-            setLocationRespose(response)
-            setTimeout(() => {
-              setCityWeather(true)
-            }, 500)
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error)
-          })
-          .finally(function () {
-            // always executed
-          })
-      } catch (error) {
-        console.log("sorry")
-      }
+      const WEATHER_API = `http://api.weatherapi.com/v1/current.json?key=c5807f066fb54e39a9772631231602&q=${inputLocation}`
+      axios
+        .get(WEATHER_API)
+        .then((response) => {
+          setCityWeather(false)
+          setLocationRespose(response)
+          setCityWeather(true)
+        })
+        .catch((error) => {
+          // handle error
+          console.log(error)
+        })
+        .finally(() => {
+          dispatch(saveLocation({ inputLocation }))
+        })
     }
   }
 

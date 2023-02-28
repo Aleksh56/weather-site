@@ -1,19 +1,19 @@
 import React from "react"
 import { useSelector } from "react-redux"
-import { IDataLocation, IlocationState } from "../interfaces"
 
 const LocationWeather: React.FC = (location: any) => {
   const locationData = useSelector(
     (state: any) => state.location.locationHistory
   )
 
-  // const historyLog = () => {
-  //   let cities = ""
-  //   for (let index = 0; index < locationData.length; index++) {
-  //     cities += locationData[index].inputLocation + " "
-  //   }
-  //   console.log(cities)
-  // }
+  const historyLog = () => {
+    let cities = ""
+    for (let index = 0; index < locationData.length; index++) {
+      cities += locationData[index].inputLocation + " "
+    }
+    console.log(cities)
+  }
+
   return (
     <div className="text-white flex items-start flex-col">
       <p className="text-3xl mb-1 font-bold">
@@ -26,9 +26,9 @@ const LocationWeather: React.FC = (location: any) => {
       <p>{location.data.current.condition.text}</p>
       <p>Humidity: {location.data.current.humidity}%</p>
       <p>Wind Speed: {location.data.current.wind_kph} km/hr</p>
-      {/* <button className="bg-red border border-1 p-2" onClick={historyLog}>
+      <button className="bg-red border border-1 p-2" onClick={historyLog}>
         History
-      </button> */}
+      </button>
     </div>
   )
 }
